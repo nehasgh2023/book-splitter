@@ -10,15 +10,29 @@ class PDFProcessor:
 
     def __init__(self, pdf_path: str):
         self.pdf_path = pdf_path
+        self.pdf_file = None
         self.pdf_reader = None
         self.total_pages = 0
         self._load_pdf()
 
     def _load_pdf(self):
-        """Load PDF file"""
-        with open(self.pdf_path, 'rb') as file:
-            self.pdf_reader = PyPDF2.PdfReader(file)
+        """Load PDF file and keep it open"""
+        try:
+            self.pdf_file = open(self.pdf_path, 'rb')
+            self.pdf_reader = PyPDF2.PdfReader(self.pdf_file)
             self.total_pages = len(self.pdf_reader.pages)
+        except Exception as e:
+            if self.pdf_file:
+                self.pdf_file.close()
+            raise
+
+    def __del__(self):
+        """Cleanup: close the PDF file when object is destroyed"""
+        if self.pdf_file:
+            try:
+                self.pdf_file.close()
+            except:
+                pass
 
     def get_metadata(self) -> Dict:
         """Extract metadata from PDF"""
