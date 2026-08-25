@@ -3,6 +3,8 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
 
+from app.routes import router
+
 load_dotenv()
 
 app = FastAPI(
@@ -21,10 +23,8 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Health check endpoint
-@app.get("/api/health")
-async def health_check():
-    return {"status": "healthy", "message": "PDF Learning App Backend is running"}
+# Include routes
+app.include_router(router)
 
 # Root endpoint
 @app.get("/")

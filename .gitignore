@@ -8,6 +8,8 @@ frontend/.env.*.local
 # Backend
 backend/venv/
 backend/__pycache__/
+backend/**/__pycache__/
+backend/**/*.pyc
 backend/*.pyc
 backend/.env
 backend/.env.local
